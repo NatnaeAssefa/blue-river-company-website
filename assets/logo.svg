@@ -1,0 +1,24 @@
+<svg width="320" height="80" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Blue River Logo - Accurate Recreation -->
+
+  <!-- Main R Symbol -->
+  <g transform="translate(15, 8)">
+    <!-- R Letter Shape -->
+    <path d="M0 0 L0 64 L8 64 L8 38 L20 38 L32 64 L42 64 L28 36 Q38 34 42 28 Q46 20 42 12 Q38 4 30 2 Q25 0 18 0 Z M8 8 L18 8 Q25 8 28 12 Q32 16 28 20 Q25 24 18 24 L8 24 Z" fill="#1E3A8A"/>
+
+    <!-- Flowing River Inside R -->
+    <path d="M8 12 Q15 16 22 20 Q28 24 22 30 Q15 36 8 44 L8 48 Q12 44 18 38 Q25 32 30 26 Q35 18 30 12 Q25 6 18 8 Q12 10 8 12 Z" fill="white"/>
+  </g>
+
+  <!-- Registered Trademark Symbol -->
+  <g transform="translate(75, 15)">
+    <circle cx="0" cy="0" r="7" fill="none" stroke="#1E3A8A" stroke-width="1.2"/>
+    <text x="0" y="3" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#1E3A8A" text-anchor="middle">®</text>
+  </g>
+
+  <!-- Company Name -->
+  <text x="100" y="32" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#1E3A8A">Blue River</text>
+
+  <!-- Tagline -->
+  <text x="100" y="52" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400" fill="#666666">Business Group</text>
+</svg>

@@ -55,33 +55,105 @@ window.addEventListener('scroll', function() {
     }
 });
 
+// Telegram Bot Configuration
+const TELEGRAM_CONFIG = {
+    botToken: '7742395371:AAEV3P-sREKRzzWfZfmnvG-irN9NkuMdxJo', // Replace with your actual bot token
+    chatId: '322296457'      // Replace with your actual chat ID
+};
+
 // Contact Form Handling
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     // Get form data
     const formData = new FormData(this);
     const name = formData.get('name');
     const email = formData.get('email');
-    const phone = formData.get('phone');
+    const phone = formData.get('phone') || 'Not provided';
     const service = formData.get('service');
     const message = formData.get('message');
-    
+
     // Basic validation
     if (!name || !email || !service || !message) {
         showNotification('Please fill in all required fields.', 'error');
         return;
     }
-    
+
     if (!isValidEmail(email)) {
         showNotification('Please enter a valid email address.', 'error');
         return;
     }
-    
-    // Simulate form submission (replace with actual form handling)
-    showNotification('Thank you for your message! We will get back to you soon.', 'success');
-    this.reset();
+
+    // Show loading state
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Sending...';
+    submitButton.disabled = true;
+
+    try {
+        // Send to Telegram
+        await sendToTelegram(name, email, phone, service, message);
+        showNotification('✅ Message sent successfully! We will contact you within 24 hours.', 'success');
+        this.reset();
+    } catch (error) {
+        console.error('Error sending message:', error);
+
+        // If Telegram is not configured, show alternative contact methods
+        if (error.message.includes('configuration not set')) {
+            showNotification('📧 Please contact us directly at blueriverbusinessgroup@gmail.com or call +251 97 055 5566', 'info');
+        } else {
+            showNotification('⚠️ Message could not be sent. Please contact us directly at blueriverbusinessgroup@gmail.com', 'error');
+        }
+    } finally {
+        // Reset button state
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
 });
+
+// Function to send message to Telegram
+async function sendToTelegram(name, email, phone, service, message) {
+    // Check if Telegram config is set
+    if (TELEGRAM_CONFIG.botToken === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CONFIG.chatId === 'YOUR_CHAT_ID_HERE') {
+        throw new Error('Telegram configuration not set');
+    }
+
+    // Format message for Telegram
+    const telegramMessage = `
+🚛 *New Inquiry - Blue River Business Group*
+
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+🔧 *Service:* ${service}
+
+💬 *Message:*
+${message}
+
+⏰ *Time:* ${new Date().toLocaleString()}
+    `.trim();
+
+    // Send to Telegram Bot API
+    const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
+
+    const response = await fetch(telegramUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_CONFIG.chatId,
+            text: telegramMessage,
+            parse_mode: 'Markdown'
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`Telegram API error: ${response.status}`);
+    }
+
+    return response.json();
+}
 
 // Email validation function
 function isValidEmail(email) {
@@ -108,11 +180,26 @@ function showNotification(message, type) {
     `;
     
     // Add styles
+    let backgroundColor;
+    switch(type) {
+        case 'success':
+            backgroundColor = '#10B981';
+            break;
+        case 'error':
+            backgroundColor = '#EF4444';
+            break;
+        case 'info':
+            backgroundColor = '#3B82F6';
+            break;
+        default:
+            backgroundColor = '#6B7280';
+    }
+
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: ${type === 'success' ? '#10B981' : '#EF4444'};
+        background: ${backgroundColor};
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 8px;
@@ -120,7 +207,8 @@ function showNotification(message, type) {
         z-index: 10000;
         transform: translateX(400px);
         transition: transform 0.3s ease;
-        max-width: 400px;
+        max-width: 450px;
+        line-height: 1.4;
     `;
     
     notification.querySelector('.notification-content').style.cssText = `
@@ -250,7 +338,7 @@ if (statsSection) {
 
 // Lazy loading for images
 if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
+    const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
@@ -313,6 +401,20 @@ window.addEventListener('scroll', function() {
     } else if (scrollButton && scrollTop <= 300) {
         scrollButton.remove();
     }
+});
+
+// Auto-update copyright year
+function updateCopyrightYear() {
+    const currentYear = new Date().getFullYear();
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = currentYear;
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateCopyrightYear();
 });
 
 console.log('Blue River Business Group website loaded successfully!');

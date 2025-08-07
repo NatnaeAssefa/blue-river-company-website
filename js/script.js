@@ -57,8 +57,8 @@ window.addEventListener('scroll', function() {
 
 // Telegram Bot Configuration
 const TELEGRAM_CONFIG = {
-    botToken: '7742395371:AAEV3P-sREKRzzWfZfmnvG-irN9NkuMdxJo', // Replace with your actual bot token
-    chatId: '322296457'      // Replace with your actual chat ID
+    botToken: '8472996468:AAHZkSXe7_paEYxTFJxw1vKP9VjR-dcu3bY', // Replace with your actual bot token
+    chatId: '-1002878130463'      // Replace with your actual chat ID
 };
 
 // Contact Form Handling

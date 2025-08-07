@@ -1,3 +1,20 @@
+// Page Loader
+window.addEventListener('load', function() {
+    const loader = document.getElementById('pageLoader');
+    setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.style.overflow = 'visible';
+
+        // Trigger entrance animations
+        setTimeout(() => {
+            const heroElements = document.querySelectorAll('.hero-title, .hero-subtitle, .hero-buttons');
+            heroElements.forEach((el, index) => {
+                el.style.animation = `fadeInUp 0.8s ease-out ${index * 0.2}s both`;
+            });
+        }, 300);
+    }, 1500);
+});
+
 // Mobile Navigation Toggle
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
@@ -45,13 +62,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Header Background on Scroll
+// Enhanced Header Effects on Scroll
 window.addEventListener('scroll', function() {
     const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
+    const scrollY = window.scrollY;
+
+    if (scrollY > 100) {
+        header.classList.add('scrolled');
     } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.classList.remove('scrolled');
+    }
+
+    // Add parallax effect to hero
+    const hero = document.querySelector('.hero');
+    if (hero && scrollY < hero.offsetHeight) {
+        hero.style.transform = `translateY(${scrollY * 0.3}px)`;
     }
 });
 
@@ -251,7 +276,7 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// Intersection Observer for animations
+// Advanced Intersection Observer for animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -260,18 +285,203 @@ const observerOptions = {
 const observer = new IntersectionObserver(function(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-up');
+            entry.target.classList.add('animate-in');
+
+            // Add staggered animation for grid items
+            if (entry.target.parentElement.classList.contains('services-grid') ||
+                entry.target.parentElement.classList.contains('values-grid') ||
+                entry.target.parentElement.classList.contains('why-us-grid')) {
+
+                const siblings = Array.from(entry.target.parentElement.children);
+                const index = siblings.indexOf(entry.target);
+                entry.target.style.animationDelay = `${index * 0.1}s`;
+            }
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
+// Parallax effect for hero section
+function addParallaxEffect() {
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        const heroHeight = hero.offsetHeight;
+
+        if (scrolled < heroHeight) {
+            const parallaxSpeed = scrolled * 0.5;
+            hero.style.transform = `translateY(${parallaxSpeed}px)`;
+        }
+    });
+}
+
+// Smooth reveal animations
+function addRevealAnimations() {
+    const revealElements = document.querySelectorAll('.section-title, .section-subtitle');
+
+    revealElements.forEach(element => {
+        observer.observe(element);
+    });
+}
+
+// Counter animation for stats
+function animateCounters() {
+    const counters = document.querySelectorAll('.stat h3, .stat-number');
+
+    counters.forEach(counter => {
+        const updateCounter = () => {
+            const target = counter.getAttribute('data-target');
+            if (!target) return;
+
+            const count = +counter.innerText.replace(/[^\d]/g, '');
+            const targetNum = +target;
+            const increment = targetNum / 100;
+
+            if (count < targetNum) {
+                const newCount = Math.ceil(count + increment);
+
+                // Format based on original content
+                if (counter.classList.contains('stat-number')) {
+                    if (targetNum >= 1000) {
+                        counter.innerText = newCount.toLocaleString() + '+';
+                    } else {
+                        counter.innerText = newCount + '+';
+                    }
+                } else {
+                    const text = counter.getAttribute('data-original');
+                    if (text && text.includes('24/7')) {
+                        counter.innerText = '24/7';
+                    } else if (text && text.includes('100%')) {
+                        counter.innerText = newCount + '%';
+                    }
+                }
+
+                setTimeout(updateCounter, 50);
+            } else {
+                // Final value
+                if (counter.classList.contains('stat-number')) {
+                    if (targetNum >= 1000) {
+                        counter.innerText = targetNum.toLocaleString() + '+';
+                    } else {
+                        counter.innerText = targetNum + '+';
+                    }
+                } else {
+                    const text = counter.getAttribute('data-original');
+                    if (text && text.includes('24/7')) {
+                        counter.innerText = '24/7';
+                    } else if (text && text.includes('100%')) {
+                        counter.innerText = targetNum + '%';
+                    }
+                }
+            }
+        };
+
+        // Set data-target for different types of stats
+        if (counter.classList.contains('stat-number')) {
+            // These are the new client stats
+            const target = counter.getAttribute('data-target');
+            if (target) {
+                counter.innerText = '0';
+
+                // Create intersection observer for this counter
+                const counterObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            counterObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                counterObserver.observe(counter);
+            }
+        } else {
+            // These are the hero stats
+            const text = counter.textContent;
+            if (text.includes('24/7')) {
+                counter.setAttribute('data-target', '24');
+                counter.setAttribute('data-original', text);
+                counter.textContent = '0/7';
+            } else if (text.includes('100%')) {
+                counter.setAttribute('data-target', '100');
+                counter.setAttribute('data-original', text);
+                counter.textContent = '0%';
+            }
+
+            observer.observe(counter);
+            counter.addEventListener('animationstart', updateCounter);
+        }
+    });
+}
+
+// Hero Background Slideshow
+function initHeroSlideshow() {
+    const slides = document.querySelectorAll('.hero-bg-slide');
+    const indicators = document.querySelectorAll('.hero-indicator');
+    let currentSlide = 0;
+    let slideInterval;
+
+    function goToSlide(slideIndex) {
+        // Remove active classes
+        slides[currentSlide].classList.remove('active');
+        indicators[currentSlide].classList.remove('active');
+
+        // Set new slide
+        currentSlide = slideIndex;
+
+        // Add active classes
+        slides[currentSlide].classList.add('active');
+        indicators[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+        const nextIndex = (currentSlide + 1) % slides.length;
+        goToSlide(nextIndex);
+    }
+
+    function startSlideshow() {
+        slideInterval = setInterval(nextSlide, 7000);
+    }
+
+    function stopSlideshow() {
+        clearInterval(slideInterval);
+    }
+
+    // Add click handlers to indicators
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            goToSlide(index);
+            stopSlideshow();
+            // Restart slideshow after manual selection
+            setTimeout(startSlideshow, 10000);
+        });
+    });
+
+    // Start automatic slideshow
+    startSlideshow();
+}
+
+// Initialize all animations
 document.addEventListener('DOMContentLoaded', function() {
-    const animateElements = document.querySelectorAll('.service-card, .value-item, .why-us-item, .sector-item, .mission-vision-item');
+    // Observe elements for animation
+    const animateElements = document.querySelectorAll('.service-card, .value-item, .why-us-item, .sector-item, .mission-vision-item, .contact-item, .transport-item, .client-logo-card');
     animateElements.forEach(el => {
         el.classList.add('loading');
         observer.observe(el);
     });
+
+    // Initialize advanced animations
+    addParallaxEffect();
+    addRevealAnimations();
+    animateCounters();
+    initHeroSlideshow();
+
+    // Add floating animation to hero elements
+    setTimeout(() => {
+        const heroElements = document.querySelectorAll('.hero-title, .hero-subtitle, .hero-buttons');
+        heroElements.forEach((el, index) => {
+            el.style.animation = `fadeInUp 0.8s ease-out ${index * 0.2}s both`;
+        });
+    }, 100);
 });
 
 // Add loading animation class

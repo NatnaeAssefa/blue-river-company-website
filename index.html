@@ -12,6 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Page Loader -->
+    <div id="pageLoader" class="page-loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <img src="assets/logo.svg" alt="Blue River" class="loader-logo-img">
+            </div>
+            <div class="loader-spinner">
+                <div class="spinner"></div>
+            </div>
+            <p class="loader-text">Loading Blue River Experience...</p>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <nav class="nav">
@@ -47,6 +59,26 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <!-- Background Slideshow -->
+        <div class="hero-background">
+            <div class="hero-bg-slide active"></div>
+            <div class="hero-bg-slide"></div>
+            <div class="hero-bg-slide"></div>
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
         <div class="hero-container">
             <div class="hero-content">
                 <h1 class="hero-title">Transforming Logistics in East Africa</h1>
@@ -70,6 +102,13 @@
                     <p>Regional Coverage</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Slideshow Indicators -->
+        <div class="hero-indicators">
+            <div class="hero-indicator active" data-slide="0"></div>
+            <div class="hero-indicator" data-slide="1"></div>
+            <div class="hero-indicator" data-slide="2"></div>
         </div>
     </section>
 
@@ -329,6 +368,98 @@
                 <div class="sector-item">
                     <i class="fas fa-landmark"></i>
                     <h3>Government Entities</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Honorary Clients Section -->
+    <section class="honorary-clients">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Honorary Clients</h2>
+                <p class="section-subtitle">Trusted by leading organizations across East Africa and beyond</p>
+            </div>
+
+            <div class="clients-showcase">
+                <div class="clients-grid">
+                    <div class="client-logo-card featured">
+                        <div class="logo-container">
+                            <img src="assets/companies/2560px-Ethiopian_Airlines_Logo.svg.png" alt="Ethiopian Airlines" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>Ethiopian Airlines</h3>
+                            <p>Africa's Largest Aviation Group</p>
+                        </div>
+                    </div>
+
+
+                    <div class="client-logo-card">
+                        <div class="logo-container">
+                            <img src="assets/companies/freighters_international_pabomi_plc.jpg" alt="Freighters International" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>Freighters International</h3>
+                            <p>Pabomi PLC</p>
+                        </div>
+                    </div>
+
+                    <div class="client-logo-card">
+                        <div class="logo-container">
+                            <img src="assets/companies/Yegna-Trading-Logo@92x-8.png" alt="Yegna Trading" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>Yegna Trading</h3>
+                            <p>Import & Export</p>
+                        </div>
+                    </div>
+
+                    <div class="client-logo-card">
+                        <div class="logo-container">
+                            <img src="assets/companies/Group-3-2.png" alt="Business Partner" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>Strategic Partner</h3>
+                            <p>Logistics Solutions</p>
+                        </div>
+                    </div>
+
+                    <div class="client-logo-card">
+                        <div class="logo-container">
+                            <img src="assets/companies/Logo.fw_.png" alt="Corporate Client" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>Corporate Client</h3>
+                            <p>Manufacturing Sector</p>
+                        </div>
+                    </div>
+
+                    <div class="client-logo-card">
+                        <div class="logo-container">
+                            <img src="assets/companies/logo-1-2.png" alt="International Partner" class="client-logo">
+                        </div>
+                        <div class="client-info">
+                            <h3>International Partner</h3>
+                            <p>Global Trade</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Floating Stats -->
+                <div class="client-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Happy Clients</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1000">0</div>
+                        <div class="stat-label">Successful Deliveries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="15">0</div>
+                        <div class="stat-label">Countries Served</div>
+                    </div>
                 </div>
             </div>
         </div>
